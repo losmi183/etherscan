@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Services\TransactionServices;
+use App\Http\Requests\TransactionsRequest;
 use App\Http\Requests\TransactionsFetchRequest;
 
 class TransactionController extends Controller
@@ -29,6 +30,16 @@ class TransactionController extends Controller
             'message' => 'Fetsh transaction from external API and insert into database finished.',
             'data' => $result
         ]); 
+    }
+
+
+    public function transactions(TransactionsRequest $request, TransactionServices $transactionServices): JsonResponse
+    {
+        $params = $request->validated();
+
+        $result = $transactionServices->transactions($params);
+
+        return response()->json($result); 
     }
 
 

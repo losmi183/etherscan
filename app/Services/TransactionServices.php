@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Repositories\TransactionRepository;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\TransactionRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 // use Illuminate\Support\Collection;
 // use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -32,6 +33,12 @@ class TransactionServices {
         $result = (new TransactionRepository)->saveTransactions($transactions, $address);
 
         return $result;
+    }
+
+    public function transactions(array $params): LengthAwarePaginator
+    {
+        // params array to single variables - types already validated in request
+        return (new TransactionRepository)->transactionsPaginated(...$params);
     }
 
 }
