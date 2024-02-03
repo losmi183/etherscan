@@ -35,7 +35,7 @@ class TransactionRepository {
     }
 
 
-    public function transactionsPaginated(int $itemsPerPage, int $page, array $sortBy, string $search): LengthAwarePaginator
+    public function transactionsPaginated(string $address, int $itemsPerPage, int $page, array $sortBy, string $search): LengthAwarePaginator
     {
         // -1 value : return all in one page - count all transactions 
         if ($itemsPerPage == -1) {
@@ -47,7 +47,7 @@ class TransactionRepository {
             return $page;
         });
 
-        return Transaction::paginate($itemsPerPage);
+        return Transaction::where('address', $address)->paginate($itemsPerPage);
         // return Transaction::get(10);
     }
 

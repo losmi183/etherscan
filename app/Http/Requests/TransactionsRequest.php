@@ -26,6 +26,8 @@ class TransactionsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'address'=>'required|string',
+
             'itemsPerPage'=>'nullable|int',
             'page'=>'nullable|int',
             'sortBy'=>'nullable|array',
