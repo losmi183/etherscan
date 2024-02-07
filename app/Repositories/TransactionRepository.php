@@ -50,8 +50,21 @@ class TransactionRepository {
             return $page;
         });
 
-        return Transaction::where('address', $address)->paginate($itemsPerPage);
-        // return Transaction::get(10);
+        $result = Transaction::where('address', $address)->paginate($itemsPerPage);
+
+        // Iterate through each item in the result set and add custom fields
+        // if $address is same as to - transaction to $address - else out
+        $result->getCollection()->transform(function ($item) use ($address) {
+            // Add custom fields to each object
+            if($item->to == $address) {
+                $item->direction = 'in';
+            } else {
+                $item->direction = 'out';
+            }
+            return $item;
+        });
+
+        return $result;
     }
 
 

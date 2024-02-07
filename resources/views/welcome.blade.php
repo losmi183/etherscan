@@ -36,6 +36,11 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
+                            Username: @{{ wallet.username }} <br>
+                            email: @{{ wallet.email }}<br>
+                            address: @{{ wallet.address }}<br>
+                        </v-col>
+                        <v-col cols="12">
                             <v-data-table
                                 dense
                                 :headers="headers"
@@ -68,14 +73,20 @@
         el: "#app",
         vuetify: new Vuetify(),
         mounted() {
-            this.fetchData()
+            this.loadWallet()
+            // this.fetchData()
         },
         data: {
+            wallet: {},
             transactions: [],
             headers: [
                 { text: 'Id', value: 'id' },
                 { text: 'Address', value: 'address' },
                 { text: 'timeStamp', value: 'timeStamp' },
+                { text: 'From', value: 'from' },
+                { text: 'To', value: 'to' },
+                { text: 'Value', value: 'value' },
+                { text: 'Direction', value: 'direction' },
             ],
             pagination: {
                 page: 1,
@@ -83,6 +94,15 @@
             }
         },
         methods: {
+
+            loadWallet() {
+                axios.get('/api/wallet')
+                .then(result => { 
+                    this.wallet = result.data.data;
+                })
+                .catch(error => console.log(error));
+            },
+
             fetchData(page = 1) {
                 axios.post('/api/transactions', {
                     "address": "0xaa7a9ca87d3694b5755f213b5d04094b8d0f0a6f",
@@ -96,6 +116,9 @@
             }
         },
         watch: {
+            'wallet': function() {
+                this.fetchData();
+            },
             'pagination.page': function(newPage) {
                 this.fetchData(newPage);
             },

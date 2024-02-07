@@ -63,7 +63,9 @@ class TransactionServices {
     public function transactions(array $params): LengthAwarePaginator
     {
         // params array to single variables - types already validated in request
-        return $this->transactionRepository->transactionsPaginated(...$params);
+        $transactions = $this->transactionRepository->transactionsPaginated(...$params);
+
+        return $transactions;
     }
 
 }

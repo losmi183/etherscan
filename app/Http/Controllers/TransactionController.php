@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\TransactionServices;
@@ -43,6 +44,19 @@ class TransactionController extends Controller
         $result = $transactionServices->transactions($params);
 
         return response()->json($result); 
+    }
+
+    /**
+     * Return first walet with address
+     * 
+     * @return [type]
+     */
+    public function wallet()
+    {
+        $wallet = Wallet::first();
+        return response()->json([
+            'data' => $wallet
+        ]); 
     }
 
 

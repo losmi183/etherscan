@@ -18,3 +18,4 @@ use App\Http\Controllers\TransactionController;
 // Fetch transaction data from API and save to local DB
 Route::post('/transactions-fetch', [TransactionController::class, 'transactionsFetch']);
 Route::post('/transactions', [TransactionController::class, 'transactions']);
+Route::get('/wallet', [TransactionController::class, 'wallet']);
