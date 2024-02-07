@@ -25,22 +25,34 @@ class EtherscanFetch extends Command
      */
     protected $description = 'Fetch transactions using etherscan API';
 
+    public $transactionServices;
+
+    /**
+     * @param TransactionServices $transactionServices
+     */
+    public function __construct(TransactionServices $transactionServices)
+    {
+        parent::__construct();
+        $this->transactionServices = $transactionServices;
+    }
+
     /**
      * Execute the console command.
      *
      * @return int
      */
-    public function handle()
+    public function handle(): void
     {
-        $params = [
-            'address' => '0xaa7a9ca87d3694b5755f213b5d04094b8d0f0a6f'
-        ];
-        $transactionRepository = new TransactionRepository;
-        $httpServices = new HttpServices;
-        $transactionServices = new TransactionServices($transactionRepository, $httpServices);
+        // $params = [
+        //     'address' => '0xaa7a9ca87d3694b5755f213b5d04094b8d0f0a6f'
+        // ];
+        // $transactionRepository = new TransactionRepository;
+        // $httpServices = new HttpServices;
+        // $transactionServices = new TransactionServices($transactionRepository, $httpServices);
+        //     dd($httpServices);
         
         try {
-            $response = $transactionServices->transactionsFetch($params);
+            $response = $this->transactionServices->transactionsFetch();
         
             // Provjera odgovora i izvršavanje odgovarajućih radnji
             if ($response) {
@@ -50,7 +62,7 @@ class EtherscanFetch extends Command
             }
         } catch (\Exception $e) {
             // Uhvati bilo kakve izuzetke koji se mogu dogoditi prilikom slanja zahtjeva
-            $this->error('Došlo je do greške prilikom slanja HTTP zahtjeva: ' . $e->getMessage());
+            $this->error('An error occurred while sending an HTTP request: ' . $e->getMessage());
         }
 
     }

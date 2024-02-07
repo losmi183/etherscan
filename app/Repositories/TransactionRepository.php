@@ -11,6 +11,18 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class TransactionRepository {
 
     /**
+     * @return void
+     */
+    public function truncateTransactions(): void
+    {
+        try {
+            DB::table('transactions')->delete();
+        } catch (\Throwable $th) {
+            Log::error(json_encode($th->getMessage()));
+        }
+    }
+
+    /**
      * @param array $transactions
      * @param string $address
      * 

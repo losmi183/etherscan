@@ -41,11 +41,13 @@ class TransactionServices {
      */
     public function transactionsFetch(): array
     { 
+        $this->transactionRepository->truncateTransactions();
+
         // Getting address from DB because of simplicity
         $wallet = Wallet::first();
         $address = $wallet->address;
-        $startblock = '9000000';
-        $endblock = 'latest';
+        $startblock = config('etherscan.startblock');
+        $endblock = config('etherscan.endblock');
 
         // Prepering parameters from request and config
         $apiKey = config('etherscan.apiKey');
@@ -56,6 +58,9 @@ class TransactionServices {
         // $endblock = $params['endblock'] ? $params['endblock'] : 'latest';       
 
         $transactions = $this->httpServices->get($apiKey, $apiUrl, $address, $startblock, $endblock);
+
+        // If new transactions fetched, first delete all old transactions
+        
 
         $result = $this->transactionRepository->saveTransactions($transactions, $address);
 
