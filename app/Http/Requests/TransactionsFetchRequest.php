@@ -25,9 +25,9 @@ class TransactionsFetchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address'=>'required|string',
-            'startblock'=>'nullable|int',
-            'endblock'=>'nullable|int'
+            // 'address'=>'required|string',
+            // 'startblock'=>'nullable|int',
+            // 'endblock'=>'nullable|int'
         ];
     }
 
@@ -42,17 +42,16 @@ class TransactionsFetchRequest extends FormRequest
     }
 
     /**
-     * Setovanje neobaveznih polja na null ako nisu poslata
      * @return void
      */
-    public function prepareForValidation(): void
-    {
-        // Setting request field default value if not exists
-        if (!array_key_exists('startblock', $this->all())) {
-            $this->merge(['startblock' => 9000]);
-        }
-        if (!array_key_exists('endblock', $this->all())) {
-            $this->merge(['endblock' => null]);
-        }
-    }
+    // public function prepareForValidation(): void
+    // {
+    //     // Setting request field default value if not exists
+    //     if (!array_key_exists('startblock', $this->all())) {
+    //         $this->merge(['startblock' => 9000]);
+    //     }
+    //     if (!array_key_exists('endblock', $this->all())) {
+    //         $this->merge(['endblock' => null]);
+    //     }
+    // }
 }

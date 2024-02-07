@@ -23,9 +23,9 @@ class TransactionController extends Controller
      */
     public function transactionsFetch(TransactionsFetchRequest $request, TransactionServices $transactionServices): JsonResponse
     {
-        $params = $request->validated();
+        // $params = $request->validated();
 
-        $result = $transactionServices->transactionsFetch($params);
+        $result = $transactionServices->transactionsFetch();
 
         return response()->json($result); 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\TransactionRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -38,15 +39,21 @@ class TransactionServices {
      * 
      * @return array
      */
-    public function transactionsFetch(array $params): array
+    public function transactionsFetch(): array
     { 
+        // Getting address from DB because of simplicity
+        $wallet = Wallet::first();
+        $address = $wallet->address;
+        $startblock = '9000000';
+        $endblock = 'latest';
+
         // Prepering parameters from request and config
         $apiKey = config('etherscan.apiKey');
         $apiUrl = config('etherscan.apiUrl');
-        $address = $params['address'];
-        $startblock = $params['startblock'] ? $params['startblock'] : '9000000';
+        // $address = $params['address'];
+        // $startblock = $params['startblock'] ? $params['startblock'] : '9000000';
         // $startblock = '10000000';
-        $endblock = $params['endblock'] ? $params['endblock'] : 'latest';       
+        // $endblock = $params['endblock'] ? $params['endblock'] : 'latest';       
 
         $transactions = $this->httpServices->get($apiKey, $apiUrl, $address, $startblock, $endblock);
 
