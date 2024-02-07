@@ -26,13 +26,16 @@ class TransactionController extends Controller
 
         $result = $transactionServices->transactionsFetch($params);
 
-        return response()->json([
-            'message' => 'Fetsh transaction from external API and insert into database finished.',
-            'data' => $result
-        ]); 
+        return response()->json($result); 
     }
 
 
+    /**
+     * @param TransactionsRequest $request
+     * @param TransactionServices $transactionServices
+     * 
+     * @return JsonResponse
+     */
     public function transactions(TransactionsRequest $request, TransactionServices $transactionServices): JsonResponse
     {
         $params = $request->validated();

@@ -12,13 +12,33 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class TransactionServices {
 
     /**
+     * @var TransactionRepository
+     */
+    protected TransactionRepository $transactionRepository;
+    /**
+     * @var HttpServices
+     */
+    protected HttpServices $httpServices;
+
+
+    /**
+     * @param TransactionRepository $transactionRepository
+     * @param HttpServices $httpServices
+     */
+    public function __construct(TransactionRepository $transactionRepository, HttpServices $httpServices)
+    {
+        $this->transactionRepository = $transactionRepository;
+        $this->httpServices = $httpServices;
+    }
+
+    /**
      * transactionsFetch - get transactions from api and save to database
      * 
      * @param array $params
      * 
      * @return array
      */
-    public function transactionsFetch(array $params): \stdClass
+    public function transactionsFetch(array $params): array
     { 
         // Prepering parameters from request and config
         $apiKey = config('etherscan.apiKey');
@@ -28,17 +48,22 @@ class TransactionServices {
         // $startblock = '10000000';
         $endblock = $params['endblock'] ? $params['endblock'] : 'latest';       
 
-        $transactions = (new HttpServices)->get($apiKey, $apiUrl, $address, $startblock, $endblock);
+        $transactions = $this->httpServices->get($apiKey, $apiUrl, $address, $startblock, $endblock);
 
-        $result = (new TransactionRepository)->saveTransactions($transactions, $address);
+        $result = $this->transactionRepository->saveTransactions($transactions, $address);
 
         return $result;
     }
 
+    /**
+     * @param array $params
+     * 
+     * @return LengthAwarePaginator
+     */
     public function transactions(array $params): LengthAwarePaginator
     {
         // params array to single variables - types already validated in request
-        return (new TransactionRepository)->transactionsPaginated(...$params);
+        return $this->transactionRepository->transactionsPaginated(...$params);
     }
 
 }

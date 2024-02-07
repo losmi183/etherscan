@@ -43,6 +43,7 @@
                                 item-key="name"
                                 class="elevation-1"
                                 :pagination.sync="pagination"
+                                :footer-props="{ itemsPerPageOptions: [5, 10] }"
                             ></v-data-table>  
                         </v-col>
                         <v-col>
@@ -50,7 +51,7 @@
                                 v-model="pagination.page"
                                 :length="transactions.length"
                                 :total-items="pagination.totalItems"
-                                :rows-per-page-items="[5, 10, 15]"
+                                :rows-per-page-items="[5, 10]"
                                 @input="fetchData"
                             ></v-pagination>
                         </v-col>
@@ -97,6 +98,10 @@
         watch: {
             'pagination.page': function(newPage) {
                 this.fetchData(newPage);
+            },
+            'pagination.itemsPerPage': function(newItemsPerPage) {
+                this.pagination.page = 1; // Resetujemo stranicu na prvu kada se promeni broj stavki po stranici
+                this.fetchData();
             }
         },
     });
